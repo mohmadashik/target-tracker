@@ -1,0 +1,5 @@
+migrations/
+__pycache__/
+instance
+bkp_july_21/
+venv/

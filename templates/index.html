@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Progress Tracker</title>
+    <style>
+      .progress-bar {
+        width: 100%;
+        background-color: #f3f3f3;
+      }
+      .progress {
+        height: 30px;
+        text-align: center;
+        line-height: 30px;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Progress Tracker</h1>
+      <form action="{{ url_for('create_target') }}" method="post">
+        <input type="text" name="name" placeholder="Target Name" required>
+        <input type="number" name="target" placeholder="Target Count" required>
+        <button type="submit">Create Target</button>
+      </form>
+      <hr>
+      {% for target in targets %}
+        <div>
+          <h2>{{ target.name }}</h2>
+          <p>Target: {{ target.target }} units</p>
+          <p>Progress: {{ target.progress }} units</p>
+          <div class="progress-bar">
+            <div class="progress" style="width: {{ (target.progress / target.target) * 100 }}%; background-color: {{ 'green' if target.progress == target.target else 'yellow' }};color:black;">
+              {{ ((target.progress / target.target) * 100) | round(3) }}%
+            </div>
+          </div>
+          <form action="{{ url_for('update_progress') }}" method="post">
+            <input type="hidden" name="target_id" value="{{ target.id }}">
+            <input type="number" name="change" placeholder="Enter change (+/-)" required>
+            <button type="submit">Update Progress</button>
+          </form>
+        </div>
+        <hr>
+      {% endfor %}
+      <form action="{{ url_for('backup') }}">
+        <button type="submit">Backup Data</button>
+      </form>
+      <hr>
+      <form action="{{ url_for('restore') }}" method="post">
+        <button type="submit">Restore Data</button>
+      </form>
+    </div>
+  </body>
+</html>
